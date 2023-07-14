@@ -44,5 +44,5 @@ jobs:
           remote-user: ${{ secrets.SERVER_USER }}
           private-ssh-key: ${{ secrets.SERVER_SSH_KEY }}
           ssh-port: ${{ secrets.SERVER_PORT }}
-          source-path: build/WebGL/WebGL
+          source-path: build/WebGL/WebGL/
           destination-path: ${{ secrets.SERVER_DEST_PATH }}
