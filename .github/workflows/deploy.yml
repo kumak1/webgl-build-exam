@@ -18,7 +18,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-WebGL
           restore-keys: |
             Library-
 
@@ -44,4 +44,5 @@ jobs:
           remote-user: ${{ secrets.SERVER_USER }}
           private-ssh-key: ${{ secrets.SERVER_SSH_KEY }}
           ssh-port: ${{ secrets.SERVER_PORT }}
-          destination-path: build
+          source-path: ${{ secrets.SERVER_SRC_PATH }}
+          destination-path: ${{ secrets.SERVER_DEST_PATH }}
