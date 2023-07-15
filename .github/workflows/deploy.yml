@@ -3,10 +3,20 @@ on:
   push:
     tags:
       - "v*"
-
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy'
+        default: 'env'
+        required: true
+        type: choice
+        options:
+          - 'env'
+          - 'sftp'
+          - 'ftps'
 jobs:
-  deploy:
-    name: Deploy
+  bulid:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -36,6 +46,17 @@ jobs:
         with:
           name: Build
           path: build/WebGL/WebGL
+
+  deploy:
+    name: Deploy
+    if: ${{ inputs.deploy == 'sftp' || inputs.deploy == 'env' && vars.DEPLOY_PROTOCOL == 'sftp' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download
+        uses: actions/download-artifact@v3
+        with:
+          name: Build
+          path: Build
 
       - name: Deploy
         uses: SamKirkland/web-deploy@v1
