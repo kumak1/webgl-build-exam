@@ -1,0 +1,24 @@
+name: Deploy SFTP
+on:
+  workflow_dispatch: {}
+  workflow_call: {}
+jobs:
+  deploy:
+    name: Deploy SFTP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download
+        uses: actions/download-artifact@v3
+        with:
+          name: Build
+          path: build
+
+      - name: Deploy
+        uses: SamKirkland/web-deploy@v1
+        with:
+          target-server: ${{ secrets.SERVER_HOST }}
+          remote-user: ${{ secrets.SERVER_USER }}
+          private-ssh-key: ${{ secrets.SERVER_SSH_KEY }}
+          ssh-port: ${{ secrets.SERVER_PORT }}
+          source-path: build/WebGL/WebGL/
+          destination-path: ${{ secrets.SERVER_DEST_PATH }}
