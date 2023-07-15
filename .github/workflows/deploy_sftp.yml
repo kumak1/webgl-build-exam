@@ -1,6 +1,12 @@
 name: Deploy SFTP
 on:
-  workflow_dispatch: {}
+  workflow_dispatch: 
+    inputs:
+      source:
+        description: 'Artifact Source Path'
+        default: 'Build'
+        required: true
+        type: string
   workflow_call: {}
 jobs:
   deploy:
@@ -11,7 +17,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Build
-          path: build
+          path: ${{ inputs.source }}
 
       - name: Deploy
         uses: SamKirkland/web-deploy@v1
@@ -20,5 +26,5 @@ jobs:
           remote-user: ${{ secrets.SERVER_USER }}
           private-ssh-key: ${{ secrets.SERVER_SSH_KEY }}
           ssh-port: ${{ secrets.SERVER_PORT }}
-          source-path: build/WebGL/WebGL/
+          source-path: ${{ inputs.source }}
           destination-path: ${{ secrets.SERVER_DEST_PATH }}
