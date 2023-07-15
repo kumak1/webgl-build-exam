@@ -53,12 +53,12 @@ jobs:
         if: ${{ inputs.deploy == 'sftp' || inputs.deploy == 'env' && vars.DEPLOY_PROTOCOL == 'sftp' }}
         uses: SamKirkland/web-deploy@v1
         with:
-          target-server: ${{ secrets.SERVER_HOST }}
-          remote-user: ${{ secrets.SERVER_USER }}
-          private-ssh-key: ${{ secrets.SERVER_SSH_KEY }}
-          ssh-port: ${{ secrets.SERVER_PORT }}
+          target-server: ${{ secrets.SFTP_HOST }}
+          remote-user: ${{ secrets.SFTP_USER }}
+          private-ssh-key: ${{ secrets.SFTP_KEY }}
+          ssh-port: ${{ secrets.SFTP_PORT }}
           source-path: ${{ env.UNITY_BUILD_PATH }}
-          destination-path: ${{ secrets.SERVER_DEST_PATH }}
+          destination-path: ${{ secrets.SFTP_DEST_PATH }}
 
       - name: Deploy by FTPS
         if: ${{ inputs.deploy == 'ftps' || inputs.deploy == 'env' && vars.DEPLOY_PROTOCOL == 'ftps' }}
