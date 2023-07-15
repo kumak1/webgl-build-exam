@@ -47,18 +47,8 @@ jobs:
           name: Build
           path: build/WebGL/WebGL
 
-  deploy:
-    name: Deploy
-    if: ${{ inputs.deploy == 'sftp' || inputs.deploy == 'env' && vars.DEPLOY_PROTOCOL == 'sftp' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download
-        uses: actions/download-artifact@v3
-        with:
-          name: Build
-          path: Build
-
-      - name: Deploy
+      - name: Deploy by SFTP
+        if: ${{ inputs.deploy == 'sftp' || inputs.deploy == 'env' && vars.DEPLOY_PROTOCOL == 'sftp' }}
         uses: SamKirkland/web-deploy@v1
         with:
           target-server: ${{ secrets.SERVER_HOST }}
