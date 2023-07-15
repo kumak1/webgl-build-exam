@@ -18,6 +18,8 @@ jobs:
   bulid:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      UNITY_BUILD_PATH: build/WebGL/WebGL/
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -45,7 +47,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: Build
-          path: build/WebGL/WebGL
+          path: ${{ env.UNITY_BUILD_PATH }}
 
       - name: Deploy by SFTP
         if: ${{ inputs.deploy == 'sftp' || inputs.deploy == 'env' && vars.DEPLOY_PROTOCOL == 'sftp' }}
@@ -55,5 +57,17 @@ jobs:
           remote-user: ${{ secrets.SERVER_USER }}
           private-ssh-key: ${{ secrets.SERVER_SSH_KEY }}
           ssh-port: ${{ secrets.SERVER_PORT }}
-          source-path: build/WebGL/WebGL/
+          source-path: ${{ env.UNITY_BUILD_PATH }}
           destination-path: ${{ secrets.SERVER_DEST_PATH }}
+
+      - name: Deploy by FTPS
+        if: ${{ inputs.deploy == 'ftps' || inputs.deploy == 'env' && vars.DEPLOY_PROTOCOL == 'ftps' }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTPS_HOST }}
+          username: ${{ secrets.FTPS_USER }}
+          password: ${{ secrets.FTPS_PASSWORD }}
+          ssh-port: ${{ secrets.FTPS_PORT }}
+          protocol: ftps
+          local-dir: ${{ env.UNITY_BUILD_PATH }}
+          server-dir: ${{ secrets.FTPS_DEST_PATH }}
