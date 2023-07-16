@@ -27,7 +27,7 @@ jobs:
           lfs: true
 
       - name: Make build directory
-        run: mkdir ${{ env.UNITY_BUILD_PATH }}
+        run: mkdir -p ${{ env.UNITY_BUILD_PATH }}
 
       - name: Setup Unity Cache
         uses: actions/cache@v3
